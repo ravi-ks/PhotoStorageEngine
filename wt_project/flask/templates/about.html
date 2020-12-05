@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+    <style>
+        *{
+        margin:0;
+        padding:0;
+        font-family:century 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        header{
+            background-image:linear-gradient(rgba(0,0,0,0.9),rgba(0,0,0,0.5)), url(/static/6bxva8DmZvNj8kaVrQZZMP.jpg);
+            background-size:cover;
+            height:100vh;
+            background-position: center;
+        }
+        ul{
+            float:right;
+            list-style-type:none;
+            margin-top: 25px;
+        }
+        ul li{
+            display:inline-block;
+        }
+        ul li a{
+            text-decoration: none;
+            color: #fff;
+            padding:5px 20px;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            border:1px solid transparent;
+            transition:0.5s ease;
+            border-radius: 30px;
+        }
+        ul li a:hover{
+            background-color: #fff;
+            color: black;
+        }
+        ul li.active a{
+            background-color: #fff;
+            color: black;
+        }
+        .main{
+            max-width: 1500px;
+        }
+        .title{
+            position: absolute;
+            top:30%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            color: #fff;
+            font-size:35px;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+        .para{
+            position: absolute;
+            top:55%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            color: #fff;
+            font-size: 25px ;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            transition:0.4s ease;
+        }
+        .bottom{
+            position: absolute;
+            top:95%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            color: #fff;
+        }
+    </style>
+    </head>
+    <body>
+        <header>
+            <div class="main">
+                <ul>
+                    <li ><a href="/index"><i class="fas fa-home"></i>HOME</a></li>
+                    <li><a href="contact"><i class="fas fa-phone-alt"></i>CONTACT</a></li>
+                    <li class="active"><a href="#"><i class="far fa-address-card"></i>ABOUT</a></li>
+                </ul>
+            </div>
+            <div class="title">
+                <h1>ABOUT US</h1>
+            </div>
+            <div class="para"> 
+                        <br><br><br><br> 
+                <P>This is a local engine within which you can upload pictures to your gallery.<br><br> You can also hide pictures in your computer, only you can see the hidden images through this interface.<br><br> All uploaded images will be stored in this file location: <p style="color:silver;">/home/ravi_kumar/wt_project/flask/static/images</p> </P>
+            </div>
+            <div class="bottom">
+                <hr>
+                <P>a web technology mini project</P>
+            </div>
+        </header>
+    </body>
+</html>

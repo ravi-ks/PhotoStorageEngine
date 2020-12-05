@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <style>
+    *{
+    margin:0;
+    padding:0;
+    font-family:century 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+
+header{
+    background-image:linear-gradient(rgba(0, 0, 0, 0.9),rgba(0,0,0,0.5)), url(/static/rsz_sw.jpg);
+    height: 100%; 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+ul{
+    margin-top: 45%;
+    list-style-type:none;
+}
+ul li{
+    display:inline-block;
+}
+ul li a{
+    text-decoration: none;
+    color: #fff;
+    padding:5px 20px;
+    font-family:  "Comic Sans MS", cursive, sans-serif;
+    border:1px solid transparent;
+    transition:0.5s ease;
+    border-radius: 30px;
+}
+ul li a:hover{
+    background-color: #fff;
+    color: black;
+}
+
+.title{
+    position: absolute;
+    top:10%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color: #fff;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size:20px;
+}
+.box{
+    display:inline-block;
+    width:200px;
+    padding: 10px;
+    padding-left:20px;
+}
+
+img{
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 100px;
+    float:center;
+    padding-bottom: 5px;
+}
+img:hover{
+    transform: scale(2,2);
+    transition: .5s ease;
+}
+
+
+main{
+    margin-left:100px;
+    top:20px;
+    width:none;
+}
+.back{
+    left:50%;
+    top:200%;
+    color:#000;
+    border:1px solid transparent;
+    border-radius: 30px;
+}
+footer{
+    background-image:linear-gradient(rgba(0, 0, 0, 0.9),rgba(0,0,0,0.5)), url(/static/rsz_sw.jpg);
+    height:100vh;
+    background-size: cover;
+    background-position: center;
+}
+.back{
+    top:90%;
+    left:50%;
+}
+
+.button {
+  background-color: #000000;
+  border: none;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 8px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+    </style>
+        <title>GALLERY</title>
+        
+
+    </head>
+    <body>
+          <script type="text/javascript">
+          function image(img) {
+              var src = img.src;
+              window.open(src);
+          }
+          </script>
+        <div class="title">
+            <h1>GALLERY</h1>
+        </div>
+        <header>
+            <!-- <div class="main">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i>HOME</a></li>
+                    <li><a href="contact.html"><i class="fas fa-phone-alt"></i>CONTACT</a></li>
+                    <li><a href="service.html"><i class="fab fa-servicestack"></i>SERVICES</a></li>
+                    <li><a href="about.html"><i class="far fa-address-card"></i>ABOUT</a></li>
+                </ul> 
+            </div> -->
+            <main>
+                <form method="POST" enctype="multipart/form-data">
+                {% for image in allImages %}
+                <div class="box"><img src="{{url_for('static', filename=image)}}" alt="{{image}}" onclick="image(this)">
+                  <button formaction="{{ url_for('delete_image') }}" name="delete" value="{{image}}" type="submit" class="button">Delete</button>
+                  {% set count = namespace(value=0) %}
+                  {% for images in canUnhide %}
+                  {% if images == image %}
+                  {% set count.value = count.value + 1 %}
+                  {% endif %}
+                  {% endfor %}
+                  {% if count.value >= 1 %}
+                  <button formaction="{{ url_for('unhide_image') }}" name="unhide" value="{{image}}" type="submit" class="button">Unhide</button>
+                  {% else %}
+                  <button formaction="{{ url_for('hide_img_gallery') }}" name="hide" value="{{image}}" type="submit" class="button">Hide</button>
+                  {% endif %}
+                  
+                  </div>
+                {% endfor %}
+                </form>
+            </main>
+        </header>
+        
+        <footer>
+            <div class="back">
+                <ul>
+                    <li><a href="/index"><i class="fas fa-chevron-circle-left"></i>BACK</a></li>
+                </ul>
+            </div>
+        </footer>
+    </body>
+</html>

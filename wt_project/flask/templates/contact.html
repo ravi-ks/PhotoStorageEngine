@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <!-- <link rel="stylesheet" href="contact.css"> -->
+       <style>
+           *{
+    margin:0;
+    padding:0;
+    font-family:century 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+header{
+    background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(/static/images_unsplash_com-photo-1534536281715-e28d76689b4d.jpg);
+    background-size:cover;
+    height:100vh;
+    background-position: center;
+}
+ul{
+    float:right;
+    list-style-type:none;
+    margin-top: 25px;
+}
+ul li{
+    display:inline-block;
+}
+ul li a{
+    text-decoration: none;
+    color: #fff;
+    padding:5px 20px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    border:1px solid transparent;
+    transition:0.5s ease;
+    border-radius: 30px;
+}
+ul li a:hover{
+    background-color: #fff;
+    color: black;
+}
+ul li.active a{
+    background-color: #fff;
+    color: black;
+}
+.main{
+    max-width: 1500px;
+}
+.title{
+    position: absolute;
+    top:25%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color: #fff;
+    font-size:35px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+form{
+    margin-top: 50px;
+
+}
+.form-control{
+    width:600px;
+    background:transparent;
+    border:none;
+    outline:none;
+    border-bottom: 0.4px solid #fff;
+    color:#fff;
+    font-size:14px;
+    margin bottom:16px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+.box{
+    text-align: center;
+    position: absolute;
+    top:36%;
+    left:30%;
+}
+input{
+    height:50px;
+}
+form .submit{
+    background-color: tomato;
+    border-color:transparent;
+    color:#fff;
+    font-size:18px;
+    letter-spacing: 2px;
+    height:50px;
+    margin-top:20px;
+    transition:0.6s ease;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+form .submit:hover{
+     background-color: #fff;
+     color:tomato;
+     cursor: pointer;
+}
+.bottom{
+    position: absolute;
+    top:95%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color: #fff;
+}
+.social{
+    position: absolute;
+    top:88%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+.insta:hover{
+    color:pink;
+    background-color: black;
+}
+.fb:hover{
+    color:rgb(47, 47, 165);
+    background-color: black;
+}
+.wapp:hover{
+    color:lightgreen;
+    background-color: black;
+}
+.lin:hover{
+    color:rgb(84, 84, 197);
+    background-color: black;
+}
+.red:hover{
+    color:red;
+    background-color: black;
+}
+.tweet:hover{
+    color:lightseagreen;
+    background-color: black;
+}
+.yt:hover{
+    color:red;
+    background-color: black;
+}
+
+       </style>
+   
+    </head>
+    <body>
+        <header>
+            <div class="main">
+                <ul>
+                    <li ><a href="/index"><i class="fas fa-home"></i>HOME</a></li>
+                    <li class="active"><a href="#"><i class="fas fa-phone-alt"></i>CONTACT</a></li>
+                    <li><a href="about"><i class="far fa-address-card"></i>ABOUT</a></li>
+                </ul>
+            </div>
+            <div class="title">
+                <h1>Contact Us</h1>
+                <h5>We would love to hear from you!</h5>
+            </div>
+            <div class="box">
+                <form action="/contact" method="POST">
+                    <input type="text" name="name" class="form-control" placeholder="Enter your name" required><br>
+                    <input type="email" name="mail" class="form-control" placeholder="Enter your mail" required><br><br>
+                    <textarea name="message" class="form-control" placeholder="Enter your message" rows="5" required></textarea><br>
+                    <input type="submit" name="" class="form-control submit" value="Submit">
+                </form>
+            </div>
+            <div class="bottom">
+                <hr>
+                <P>a web technology mini project</P>
+            </div>
+            
+        </header>
+    </body>
+</html>
