@@ -7,17 +7,45 @@ import atexit
 import sys
 import pathlib
 import time
+import mysql.connector
 
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="WTbot",
+  password="lufthansaWT"
+)
+
+mycursor = mydb.cursor()
+mycursor.execute("use webTechnologyProject")
+mycursor.execute("SELECT * FROM authentication")
+
+myresult = mycursor.fetchall()
+
+valid_usernames = []
+valid_passwords = []
+
+for x in myresult:
+  valid_usernames.append(x[0])
+  valid_passwords.append(x[1])
+
+mycursor.execute("SELECT * FROM rsa")
+myresult = mycursor.fetchall()
+
+key = ""
+iv = ""
+
+for x in myresult:
+  key = x[0]
+  iv = x[1]
+  
 app = Flask(__name__)
-#app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
-app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif', '.jpeg']
 app.config['UPLOAD_PATH'] = 'static/images'
-key = "r5u8x!A%D*G-KaPd"
-iv = "+KbPeShVmYp3s6v9"
-valid_usernames = ['ravi', 'ritish', 'harish']
-valid_passwords = ['7ise2wt']
-pathToImagesDir = "/home/ravi_kumar/wt_project/flask/static/images/" 
-pathToStaticDir = "/home/ravi_kumar/wt_project/flask/static/" 
+pathToImagesDir = "/home/ravi_kumar/wt_project/flask_clone/static/images/" 
+pathToStaticDir = "/home/ravi_kumar/wt_project/flask_clone/static/" 
+global loggedIn
+loggedIn = False
 
 @atexit.register 
 def goodbye(): 
@@ -30,26 +58,39 @@ def goodbye():
   
 @app.route('/')
 def login():
+     global loggedIn
+     loggedIn = False
      return render_template('login.html')
 
 @app.route('/login', methods=['POST'])
 def authenticate():
+     global loggedIn
      user_name=request.form['uname']
      user_passwd=request.form['psw']
      if user_name in valid_usernames:
           if user_passwd in valid_passwords:
+               loggedIn = True
                return redirect(url_for('index'))
      return render_template('unsuccessfull_login.html')
 
        
 @app.route('/index')
 def index():
-     return render_template('index.html')
+    global loggedIn
+    if loggedIn:
+        return render_template('index.html')    
+    else:
+        return redirect(url_for('login'))
 
         
 @app.route('/upload')
 def upload():
-    return render_template('upload.html')
+    global loggedIn
+    if loggedIn:
+        return render_template('upload.html')
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
@@ -83,8 +124,8 @@ def hide_files():
 @app.route('/hide_img_gallery', methods=['POST'])
 def hide_img_gallery():
     uploaded_files = request.form["hide"]
-    print("uploaded files: ")
-    print(uploaded_files)
+    #print("uploaded files: ")
+    #print(uploaded_files)
     filename_list = uploaded_files.split('/')
     temp = filename_list[1].split('_')
     filename_list1=""
@@ -92,7 +133,7 @@ def hide_img_gallery():
         filename_list1 = filename_list1 + temp[i] + "_"
     filename_list1 = filename_list1 + temp[len(temp)-1]
     filename = filename_list1
-    print("file to be encrypted: \n" + filename)
+    #print("file to be encrypted: \n" + filename)
     encrypt(pathToImagesDir + filename)
     delete_original(filename, 1)
     return redirect(url_for('gallery'))
@@ -119,7 +160,7 @@ def delete_original(filename, fromGallery):
                   if file==filename: 
                       os.remove(root+'/'+str(file))  
     else:
-          dir_path = os.path.dirname("/home/ravi_kumar/wt_project/flask/static/images") 
+          dir_path = os.path.dirname("/home/ravi_kumar/wt_project/flask_clone/static/images") 
   
           for root, dirs, files in os.walk(dir_path): 
               for file in files:  
@@ -156,26 +197,33 @@ def decrypt(encrypted_file):
       
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    global loggedIn
+    if loggedIn:
+        return render_template('about.html')
+    else:
+        return redirect(url_for('login'))
     
 @app.route('/contact')
 def contact():
-    return render_template('contact.html')
+    global loggedIn
+    if loggedIn:
+        return render_template('contact.html')
+    else:
+        return redirect(url_for('login'))
     
 @app.route('/contact', methods=['POST'])
 def contact_queries():
-          f = open("customer_query.txt", "a")
-          f.write(request.form['name'])
-          f.write("\n")
-          f.write(request.form['mail'])
-          f.write("\n")
-          f.write(request.form['message'])
-          f.write("\n##########\n")
-          f.close()
+          mycursor = mydb.cursor()
+          sql = "INSERT INTO contactQueries VALUES (%s, %s, %s)"
+          val = (request.form['name'], request.form['mail'], request.form['message'])
+          mycursor.execute(sql, val)
+          mydb.commit()
           return redirect(url_for('index'))
     
 @app.route('/gallery', methods=['POST', 'GET'])
 def gallery():
+    global loggedIn
+    if loggedIn:
         canUnhide = []
         canHide = []
         allImages = os.listdir('static/images')
@@ -184,11 +232,15 @@ def gallery():
                 decrypt(files)
                 canUnhide.append("images/new_" + os.path.splitext(files)[0])
         allImages = os.listdir('static/images')
-        print(canUnhide)
+        #print(canUnhide)
         allImages= ['images/' + file for file in allImages if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
-        print(allImages)
+        #print(allImages)
         
         return render_template('gallery.html', allImages = allImages, canUnhide = canUnhide, canUnhidelen = len(canUnhide))
+    
+    else:
+        return redirect(url_for('login'))
+        
 
 @app.route('/delete',  methods=['POST', 'GET'])
 def delete_image():
@@ -196,7 +248,7 @@ def delete_image():
         imageToBeDeleted = request.form['delete']
         imageToBeDeleted11 = imageToBeDeleted.split('/')
         temp = imageToBeDeleted11[1].split('_')
-        imageToBeDeleted1=""
+        imageToBeDeleted1=""  
         for i in range(1, len(temp)-1):
                   imageToBeDeleted1 = imageToBeDeleted1 + temp[i] + "_"
         imageToBeDeleted1 = imageToBeDeleted1 + temp[len(temp)-1]
